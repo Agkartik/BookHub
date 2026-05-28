@@ -83,7 +83,7 @@ export default function Home() {
   ];
 
   return (
-    <div className="min-h-screen overflow-hidden bg-transparent text-white">
+    <div className="min-h-screen overflow-x-hidden bg-transparent text-white">
       {/* Animated ambient background */}
       <div className="pointer-events-none fixed inset-0 z-0">
         <div className="glass-page-bg absolute inset-0" />

@@ -11,13 +11,7 @@ export default function Footer() {
   const currentYear = new Date().getFullYear()
 
   return (
-    <motion.footer 
-      className="bg-gray-900 text-white py-12"
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      transition={{ duration: 0.5 }}
-      viewport={{ once: true }}
-    >
+    <footer className="bg-slate-950 border-t border-white/5 text-white py-12 relative z-10 w-full">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="col-span-1 md:col-span-2">
@@ -73,6 +67,6 @@ export default function Footer() {
           </p>
         </div>
       </div>
-    </motion.footer>
+    </footer>
   )
 }
