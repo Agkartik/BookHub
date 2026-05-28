@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { toast } from "react-toastify";
 import { useAuth } from "../hooks/useAuth";
 import GlassPage from "../components/GlassPage";
+import { toAssetUrl } from "../services/api";
 import {
   FaUser, FaEnvelope, FaShieldAlt, FaHeart, FaFire, FaBookOpen,
   FaTrophy, FaEdit, FaCheck, FaMusic, FaTrash, FaUpload, FaPlus, FaTimes
@@ -51,12 +52,6 @@ export default function Profile() {
     } catch (err) {
       toast.error("Failed to remove profile picture");
     }
-  };
-
-  const getProfilePicUrl = (path) => {
-    if (!path) return null;
-    const baseUrl = (import.meta.env.VITE_API_BASE_URL || "http://localhost:5001/api").replace("/api", "");
-    return `${baseUrl}/${path}`;
   };
 
   // Music state
@@ -226,7 +221,7 @@ export default function Profile() {
               <div className="relative group mx-auto w-24 h-24 rounded-full overflow-hidden border border-white/20 shadow-lg shadow-violet-900/30 flex items-center justify-center bg-gradient-to-tr from-violet-600 to-indigo-600 text-white font-extrabold text-3xl">
                 {user.profilePicture ? (
                   <img
-                    src={getProfilePicUrl(user.profilePicture)}
+                    src={toAssetUrl(user.profilePicture)}
                     alt={user.name}
                     className="w-full h-full object-cover"
                   />

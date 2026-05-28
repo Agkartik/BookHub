@@ -13,6 +13,7 @@ import {
   FaBrain, FaForward, FaBackward, FaTrash, FaPaperPlane, FaTimes, FaMusic, FaRandom, FaRedo
 } from "react-icons/fa";
 import { applyMoodTheme } from "../utils/moodThemes";
+import { toAssetUrl } from "../services/api";
 
 export default function BookReader() {
   const { id } = useParams();
@@ -90,13 +91,6 @@ export default function BookReader() {
   const [uploadFile, setUploadFile] = useState(null);
   const [isUploadingMusic, setIsUploadingMusic] = useState(false);
   const musicFileInputRef = useRef(null);
-
-  const toAssetUrl = (path) => {
-    if (!path) return "";
-    if (path.startsWith("http://") || path.startsWith("https://")) return path;
-    const baseUrl = (import.meta.env.VITE_API_BASE_URL || "http://localhost:5001/api").replace("/api", "");
-    return `${baseUrl}/${path.replace(/\\/g, "/")}`;
-  };
 
   // Fetch book and notes
   useEffect(() => {

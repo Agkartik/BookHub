@@ -9,12 +9,7 @@ import { FaBookOpen, FaDownload, FaStar, FaChevronRight, FaFlag, FaReply, FaBook
 import gsap from "gsap";
 import { applyMoodTheme } from "../utils/moodThemes";
 
-const toAssetUrl = (path) => {
-  if (!path) return "";
-  if (path.startsWith("http://") || path.startsWith("https://")) return path;
-  const baseUrl = (import.meta.env.VITE_API_BASE_URL || "http://localhost:5001/api").replace("/api", "");
-  return `${baseUrl}/${path.replace(/\\/g, "/")}`;
-};
+import { toAssetUrl } from "../services/api";
 
 export default function BookDetail() {
   const { id } = useParams();

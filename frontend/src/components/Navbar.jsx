@@ -21,18 +21,14 @@ import {
   FaChevronDown
 } from 'react-icons/fa'
 
+import { toAssetUrl } from '../services/api'
+
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
   const [showUserDropdown, setShowUserDropdown] = useState(false)
   const [unreadNotifications, setUnreadNotifications] = useState(0)
   const { user, logoutUser } = useAuth()
   const navigate = useNavigate()
-
-  const getProfilePicUrl = (path) => {
-    if (!path) return null;
-    const baseUrl = (import.meta.env.VITE_API_BASE_URL || "http://localhost:5001/api").replace("/api", "");
-    return `${baseUrl}/${path}`;
-  };
 
   useEffect(() => {
     if (!user) return
@@ -122,7 +118,7 @@ export default function Navbar() {
                   >
                     {user.profilePicture ? (
                       <img 
-                        src={getProfilePicUrl(user.profilePicture)} 
+                        src={toAssetUrl(user.profilePicture)} 
                         alt={user.name} 
                         className="h-6 w-6 rounded-full object-cover border border-white/20" 
                       />

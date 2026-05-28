@@ -12,17 +12,12 @@ import {
   FaStar
 } from 'react-icons/fa'
 
+import { toAssetUrl } from '../services/api'
+
 export default function BookCard({ book }) {
   const [imageError, setImageError] = useState(false)
   const { user, toggleBookLike, likedBooks } = useAuth()
   const navigate = useNavigate()
-
-  const toAssetUrl = (path) => {
-    if (!path) return ""
-    if (path.startsWith("http://") || path.startsWith("https://")) return path
-    const baseUrl = (import.meta.env.VITE_API_BASE_URL || "http://localhost:5001/api").replace("/api", "")
-    return `${baseUrl}/${path.replace(/\\/g, "/")}`
-  }
   
   const isLiked = user && likedBooks.some(likedBook => 
     likedBook._id === book._id || likedBook.id === book._id
