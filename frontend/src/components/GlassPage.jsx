@@ -14,7 +14,7 @@ export default function GlassPage({ children }) {
   }, []);
 
   return (
-    <div ref={ref} className="glass-page-root relative min-h-screen overflow-hidden transition-colors duration-300">
+    <div ref={ref} className="glass-page-root relative transition-colors duration-300">
       <div className="pointer-events-none fixed inset-0 z-0">
         <div className="glass-page-bg absolute inset-0" />
         <div className="hero-blob hero-blob-1" />
