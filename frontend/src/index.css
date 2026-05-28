@@ -1,0 +1,521 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800&family=Playfair+Display:ital,wght@0,400..700;1,400..700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@property --mood-glow-1 {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: rgba(139, 92, 246, 0.45);
+}
+
+@property --mood-glow-2 {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: rgba(99, 102, 241, 0.45);
+}
+
+@property --mood-glow-3 {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: rgba(217, 70, 239, 0.25);
+}
+
+:root {
+  --mood-glow-1: rgba(139, 92, 246, 0.45);
+  --mood-glow-2: rgba(99, 102, 241, 0.45);
+  --mood-glow-3: rgba(217, 70, 239, 0.25);
+  --mood-card-border: rgba(255, 255, 255, 0.08);
+  --mood-card-border-hover: rgba(139, 92, 246, 0.25);
+  --mood-glow-color: rgba(139, 92, 246, 0.15);
+}
+
+html.mood-thrill {
+  --mood-glow-1: rgba(249, 115, 22, 0.45);
+  --mood-glow-2: rgba(239, 68, 68, 0.45);
+  --mood-glow-3: rgba(234, 179, 8, 0.25);
+  --mood-card-border: rgba(249, 115, 22, 0.15);
+  --mood-card-border-hover: rgba(249, 115, 22, 0.35);
+  --mood-glow-color: rgba(249, 115, 22, 0.15);
+}
+
+html.mood-nature {
+  --mood-glow-1: rgba(16, 185, 129, 0.45);
+  --mood-glow-2: rgba(20, 184, 166, 0.45);
+  --mood-glow-3: rgba(34, 197, 94, 0.25);
+  --mood-card-border: rgba(16, 185, 129, 0.15);
+  --mood-card-border-hover: rgba(16, 185, 129, 0.35);
+  --mood-glow-color: rgba(16, 185, 129, 0.15);
+}
+
+html.mood-dreamy {
+  --mood-glow-1: rgba(236, 72, 153, 0.45);
+  --mood-glow-2: rgba(217, 70, 239, 0.45);
+  --mood-glow-3: rgba(139, 92, 246, 0.25);
+  --mood-card-border: rgba(236, 72, 153, 0.15);
+  --mood-card-border-hover: rgba(236, 72, 153, 0.35);
+  --mood-glow-color: rgba(236, 72, 153, 0.15);
+}
+
+html.mood-mystery {
+  --mood-glow-1: rgba(124, 58, 237, 0.45);
+  --mood-glow-2: rgba(30, 41, 59, 0.6);
+  --mood-glow-3: rgba(79, 70, 229, 0.3);
+  --mood-card-border: rgba(124, 58, 237, 0.15);
+  --mood-card-border-hover: rgba(124, 58, 237, 0.4);
+  --mood-glow-color: rgba(124, 58, 237, 0.18);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  line-height: 1.6;
+  color: #333;
+  overflow-x: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+html.dark body {
+  background: #020617;
+  color: #e2e8f0;
+}
+
+html.reduce-motion * {
+  animation: none !important;
+  transition: none !important;
+}
+
+html.no-glass *,
+html.no-glass *::before,
+html.no-glass *::after {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+html.no-glass .hero-blob,
+html.no-glass .hero-glow-ring {
+  display: none !important;
+}
+
+html.no-glass .glass-card-premium,
+html.no-glass [class*="bg-white/10"],
+html.no-glass [class*="bg-[#0b0c24]/80"],
+html.no-glass [class*="bg-[#0d0f28]/95"],
+html.no-glass [class*="bg-slate-900/45"],
+html.no-glass [class*="bg-white/5"] {
+  background-color: #0b0d24 !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+html.theme-light.no-glass .glass-card-premium,
+html.theme-light.no-glass [class*="bg-white/10"],
+html.theme-light.no-glass [class*="bg-white/5"] {
+  background-color: #f1f5f9 !important;
+  border-color: rgba(15, 23, 42, 0.15) !important;
+}
+
+html.theme-light body {
+  background: radial-gradient(circle at 10% 0%, #f3e8ff 0%, #ffffff 40%, #eef2f6 100%);
+  color: #0f172a;
+}
+
+.glass-page-root {
+  background-color: transparent;
+  color: #ffffff;
+}
+
+html.theme-light .glass-page-root {
+  background-color: transparent;
+  color: #1e293b;
+}
+
+.glass-page-bg {
+  background-color: #07070f;
+  transition: background-color 0.3s ease;
+}
+
+html.theme-light .glass-page-bg {
+  background-color: transparent;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+html.dark ::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(139, 92, 246, 0.4);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(139, 92, 246, 0.6);
+}
+
+/* Premium Glassmorphism Card System */
+.glass-card-premium {
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--mood-card-border);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+  transition: border-color 0.8s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-card-premium:hover {
+  border-color: var(--mood-card-border-hover);
+  box-shadow: 0 15px 35px -5px var(--mood-glow-color), 0 10px 20px -10px rgba(0, 0, 0, 0.6);
+}
+
+html.theme-light .glass-card-premium {
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  box-shadow: 0 10px 30px -10px rgba(15, 23, 42, 0.05);
+}
+
+html.theme-light .glass-card-premium:hover {
+  border-color: rgba(99, 102, 241, 0.25);
+  box-shadow: 0 15px 35px -5px rgba(99, 102, 241, 0.1), 0 10px 20px -10px rgba(15, 23, 42, 0.08);
+}
+
+/* Glass inputs */
+.glass-input-premium {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  transition: all 0.25s ease;
+}
+
+.glass-input-premium:focus {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(139, 92, 246, 0.6);
+  box-shadow: 0 0 15px rgba(139, 92, 246, 0.2);
+}
+
+html.theme-light .glass-input-premium {
+  background: rgba(15, 23, 42, 0.03);
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  color: #0f172a;
+}
+
+html.theme-light .glass-input-premium:focus {
+  background: #ffffff;
+  border-color: rgba(99, 102, 241, 0.6);
+  box-shadow: 0 0 15px rgba(99, 102, 241, 0.15);
+}
+
+/* Light Theme overrides for specific styling */
+html.theme-light [class*="bg-white/10"],
+html.theme-light [class*="bg-white/5"] {
+  background: rgba(255, 255, 255, 0.72) !important;
+}
+
+html.theme-light [class*="border-white/20"],
+html.theme-light [class*="border-white/10"] {
+  border-color: rgba(15, 23, 42, 0.08) !important;
+}
+
+html.theme-light [class*="text-slate-200"],
+html.theme-light [class*="text-slate-300"],
+html.theme-light [class*="text-gray-400"],
+html.theme-light [class*="text-violet-200"] {
+  color: #475569 !important;
+}
+
+html.theme-light [class*="text-white"] {
+  color: #0f172a;
+}
+
+html.theme-light .hero-blob {
+  opacity: 0.18;
+}
+
+/* CSS 3D simulated Book Cover */
+.book-container-3d {
+  perspective: 1200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  will-change: transform;
+}
+
+.book-3d {
+  width: 140px;
+  height: 200px;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-shadow: 4px 8px 18px rgba(0, 0, 0, 0.45);
+}
+
+.book-container-3d:hover .book-3d {
+  transform: rotateY(-28deg) rotateX(8deg) translateZ(10px);
+  box-shadow: 15px 15px 30px rgba(0, 0, 0, 0.55);
+}
+
+.book-3d-front {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  z-index: 2;
+  transform: translateZ(9px);
+  border-radius: 2px 4px 4px 2px;
+  overflow: hidden;
+  box-shadow: inset 4px 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.book-3d-spine {
+  position: absolute;
+  width: 18px;
+  height: 100%;
+  left: -9px;
+  top: 0;
+  z-index: 1;
+  background: #2e1065;
+  transform: rotateY(-90deg) translateZ(0px);
+  box-shadow: inset -3px 0 8px rgba(0, 0, 0, 0.45);
+  border-radius: 2px 0 0 2px;
+}
+
+.book-3d-pages {
+  position: absolute;
+  width: 133px;
+  height: 196px;
+  left: 4px;
+  top: 2px;
+  z-index: 0;
+  background: linear-gradient(to right, #fcfcfc 0%, #eaeaea 90%, #d5d5d5 100%);
+  transform: translateZ(0px);
+  border-radius: 0 3px 3px 0;
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.15);
+}
+
+/* Larger 3D Book for details page */
+.book-3d-large {
+  width: 220px;
+  height: 310px;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-shadow: 6px 12px 28px rgba(0, 0, 0, 0.5);
+}
+
+.book-3d-large:hover {
+  transform: rotateY(-22deg) rotateX(6deg) translateZ(15px);
+}
+
+.book-3d-large .book-3d-front {
+  transform: translateZ(13px);
+}
+
+.book-3d-large .book-3d-spine {
+  width: 26px;
+  left: -13px;
+}
+
+.book-3d-large .book-3d-pages {
+  width: 212px;
+  height: 304px;
+  left: 5px;
+  top: 3px;
+}
+
+/* Reading Layout typography sets */
+.reader-theme-sepia {
+  background-color: #f4ecd8 !important;
+  color: #5b4636 !important;
+}
+
+.reader-theme-sepia p,
+.reader-theme-sepia h1,
+.reader-theme-sepia h2,
+.reader-theme-sepia h3 {
+  color: #5b4636 !important;
+}
+
+.reader-theme-night {
+  background-color: #0b0f19 !important;
+  color: #94a3b8 !important;
+}
+
+.reader-theme-night p,
+.reader-theme-night h1,
+.reader-theme-night h2,
+.reader-theme-night h3 {
+  color: #cbd5e1 !important;
+}
+
+.reader-theme-light {
+  background-color: #fafafa !important;
+  color: #1e293b !important;
+}
+
+.reader-theme-light p,
+.reader-theme-light h1,
+.reader-theme-light h2,
+.reader-theme-light h3 {
+  color: #1e293b !important;
+}
+
+.reader-font-serif {
+  font-family: 'Playfair Display', Georgia, serif;
+}
+
+.reader-font-sans {
+  font-family: 'Inter', sans-serif;
+}
+
+.reader-font-mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+/* Ambient glow blobs */
+.hero-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.55;
+  will-change: transform;
+}
+
+.hero-blob-1 {
+  width: 420px;
+  height: 420px;
+  top: -10%;
+  left: -5%;
+  background: radial-gradient(circle, var(--mood-glow-1) 0%, transparent 70%);
+  animation: blob-drift-1 22s ease-in-out infinite;
+  transition: --mood-glow-1 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hero-blob-2 {
+  width: 360px;
+  height: 360px;
+  top: 30%;
+  right: -8%;
+  background: radial-gradient(circle, var(--mood-glow-2) 0%, transparent 70%);
+  animation: blob-drift-2 26s ease-in-out infinite;
+  transition: --mood-glow-2 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hero-blob-3 {
+  width: 280px;
+  height: 280px;
+  bottom: 5%;
+  left: 35%;
+  background: radial-gradient(circle, var(--mood-glow-3) 0%, transparent 70%);
+  animation: blob-drift-3 20s ease-in-out infinite;
+  transition: --mood-glow-3 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes blob-drift-1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(40px, 30px) scale(1.08); }
+}
+
+@keyframes blob-drift-2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-35px, 25px) scale(1.05); }
+}
+
+@keyframes blob-drift-3 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(20px, -30px) scale(1.1); }
+}
+
+.hero-glow-ring {
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.2) 0%, transparent 65%);
+  animation: glow-pulse 6s ease-in-out infinite;
+}
+
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.6; transform: translate(-50%, -50%) scale(1); }
+  50% { opacity: 1; transform: translate(-50%, -50%) scale(1.06); }
+}
+
+.hero-marquee {
+  animation: marquee-scroll 28s linear infinite;
+}
+
+@keyframes marquee-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+html.reduce-motion .hero-blob,
+html.reduce-motion .hero-glow-ring,
+html.reduce-motion .hero-marquee {
+  animation: none !important;
+}
+
+/* Glass Animations */
+.glass-animate {
+  will-change: transform, opacity;
+}
+
+/* Page flip structure */
+.reader-page-left,
+.reader-page-right {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.reader-book-spine-crease {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 24px;
+  transform: translateX(-50%);
+  background: linear-gradient(to right, 
+    rgba(0,0,0,0.15) 0%, 
+    rgba(0,0,0,0.02) 20%, 
+    rgba(255,255,255,0.08) 50%, 
+    rgba(0,0,0,0.02) 80%, 
+    rgba(0,0,0,0.15) 100%);
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* Dynamic Reader Styles matching active book mood */
+.reader-header-mood {
+  background: rgba(11, 13, 36, 0.92) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--mood-card-border) !important;
+  box-shadow: 0 4px 20px -5px var(--mood-glow-color);
+  transition: border-color 1.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reader-sidebar-mood {
+  background: rgba(11, 13, 36, 0.85) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-right: 1px solid var(--mood-card-border) !important;
+  border-left: 1px solid var(--mood-card-border) !important;
+  transition: border-color 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Reader active chapters style */
+.reader-chapter-active {
+  background-color: var(--mood-card-border-hover) !important;
+  border: 1px solid var(--mood-card-border) !important;
+  color: #ffffff !important;
+}
