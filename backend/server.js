@@ -66,6 +66,18 @@ app.use((err, req, res, next) => {
 
 const start = async () => {
   await connectDB();
+  
+  // Auto-patch the broken Unsplash cover image if it exists in the database
+  try {
+    const Book = (await import("./models/Book.js")).default;
+    await Book.updateOne(
+      { coverImage: "https://images.unsplash.com/photo-1508349689140-030f92965d48?auto=format&fit=crop&w=800&q=80" },
+      { coverImage: "https://images.unsplash.com/photo-1509248961158-e54f6934749c?auto=format&fit=crop&w=800&q=80" }
+    );
+  } catch (err) {
+    console.error("Auto-patch image update error:", err);
+  }
+
   app.listen(process.env.PORT, () =>
     console.log("Server running on " + process.env.PORT)
   );

@@ -369,7 +369,7 @@ const sampleBooks = [
     author: "Aarav Writer",
     description: "A haunting gothic horror story set in a crumbling family manor perched high on the cliffs of a stormy coast.",
     categories: ["Fiction", "Mystery"],
-    coverImage: "https://images.unsplash.com/photo-1508349689140-030f92965d48?auto=format&fit=crop&w=800&q=80",
+    coverImage: "https://images.unsplash.com/photo-1509248961158-e54f6934749c?auto=format&fit=crop&w=800&q=80",
     pdf: "",
     pages: 275,
     language: "English",

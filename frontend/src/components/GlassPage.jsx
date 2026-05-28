@@ -6,11 +6,14 @@ export default function GlassPage({ children }) {
 
   useEffect(() => {
     if (!ref.current) return;
-    gsap.fromTo(
-      ref.current.querySelectorAll(".glass-animate"),
-      { opacity: 0, y: 15, scale: 0.98 },
-      { opacity: 1, y: 0, scale: 1, duration: 0.5, stagger: 0.05, ease: "power2.out", clearProps: "transform" }
-    );
+    const animEls = ref.current.querySelectorAll(".glass-animate");
+    if (animEls.length > 0) {
+      gsap.fromTo(
+        animEls,
+        { opacity: 0, y: 15, scale: 0.98 },
+        { opacity: 1, y: 0, scale: 1, duration: 0.5, stagger: 0.05, ease: "power2.out", clearProps: "transform" }
+      );
+    }
   }, []);
 
   return (

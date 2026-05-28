@@ -217,3 +217,104 @@ export const deleteProfilePic = async (req, res) => {
     res.status(500).json({ message: "Failed to delete profile picture" });
   }
 };
+
+export const getCart = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id).populate("cartItems.book");
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.json(user.cartItems || []);
+  } catch (error) {
+    console.error("getCart error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+export const addToCart = async (req, res) => {
+  try {
+    const { bookId, quantity = 1 } = req.body;
+    if (!bookId) {
+      return res.status(400).json({ message: "Book ID is required" });
+    }
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    if (!user.cartItems) {
+      user.cartItems = [];
+    }
+
+    const itemIndex = user.cartItems.findIndex(item => item.book && item.book.toString() === bookId);
+    if (itemIndex > -1) {
+      user.cartItems[itemIndex].quantity += Number(quantity);
+    } else {
+      user.cartItems.push({ book: bookId, quantity: Number(quantity) });
+    }
+
+    await user.save();
+    const updatedUser = await User.findById(req.user._id).populate("cartItems.book");
+    res.json(updatedUser.cartItems || []);
+  } catch (error) {
+    console.error("addToCart error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+export const updateCartItem = async (req, res) => {
+  try {
+    const { itemId } = req.params;
+    const { quantity } = req.body;
+    if (quantity === undefined || isNaN(quantity) || quantity < 1) {
+      return res.status(400).json({ message: "Valid quantity is required" });
+    }
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    if (!user.cartItems) {
+      user.cartItems = [];
+    }
+
+    const item = user.cartItems.find(
+      item => (item._id && item._id.toString() === itemId) || (item.book && item.book.toString() === itemId)
+    );
+    if (!item) {
+      return res.status(404).json({ message: "Cart item not found" });
+    }
+
+    item.quantity = Number(quantity);
+    await user.save();
+    const updatedUser = await User.findById(req.user._id).populate("cartItems.book");
+    res.json(updatedUser.cartItems || []);
+  } catch (error) {
+    console.error("updateCartItem error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+export const removeCartItem = async (req, res) => {
+  try {
+    const { itemId } = req.params;
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    if (!user.cartItems) {
+      user.cartItems = [];
+    }
+
+    user.cartItems = user.cartItems.filter(
+      item => (item._id && item._id.toString() !== itemId) && (item.book && item.book.toString() !== itemId)
+    );
+    await user.save();
+    const updatedUser = await User.findById(req.user._id).populate("cartItems.book");
+    res.json(updatedUser.cartItems || []);
+  } catch (error) {
+    console.error("removeCartItem error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};

@@ -77,11 +77,14 @@ export default function BookDetail() {
 
   useEffect(() => {
     if (book && detailContainerRef.current) {
-      gsap.fromTo(
-        detailContainerRef.current.querySelectorAll(".animate-detail-item"),
-        { opacity: 0, y: 15 },
-        { opacity: 1, y: 0, duration: 0.5, stagger: 0.08, ease: "power2.out" }
-      );
+      const animEls = detailContainerRef.current.querySelectorAll(".animate-detail-item");
+      if (animEls.length > 0) {
+        gsap.fromTo(
+          animEls,
+          { opacity: 0, y: 15 },
+          { opacity: 1, y: 0, duration: 0.5, stagger: 0.08, ease: "power2.out" }
+        );
+      }
     }
   }, [book]);
 

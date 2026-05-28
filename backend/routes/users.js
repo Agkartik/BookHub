@@ -11,7 +11,11 @@ import {
   postReadingHeartbeat,
   updateReadingGoal,
   uploadProfilePic,
-  deleteProfilePic
+  deleteProfilePic,
+  getCart,
+  addToCart,
+  updateCartItem,
+  removeCartItem
 } from "../controllers/userController.js";
 
 const router = express.Router();
@@ -25,4 +29,11 @@ router.put("/like/:id", protect, toggleLike);
 router.get("/liked-books", protect, getLikedBooks);
 router.post("/heartbeat", protect, postReadingHeartbeat);
 router.put("/reading-goal", protect, updateReadingGoal);
+
+// Cart management endpoints
+router.get("/cart", protect, getCart);
+router.post("/cart", protect, addToCart);
+router.put("/cart/:itemId", protect, updateCartItem);
+router.delete("/cart/:itemId", protect, removeCartItem);
+
 export default router;
