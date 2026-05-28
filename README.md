@@ -45,7 +45,6 @@ BookHub features a **glassmorphism-first design** with animated glowing backgrou
 
 | Role | Email | Password |
 |---|---|---|
-| Admin | admin@bookverse.com | Admin@12345 |
 | Writer | writer@bookverse.com | Writer@12345 |
 | Reader | reader@bookverse.com | Reader@12345 |
 
