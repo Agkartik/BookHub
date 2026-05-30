@@ -1,4 +1,5 @@
 import User from "../models/User.js";
+import PendingUser from "../models/PendingUser.js";
 import generateToken from "../utils/generateToken.js";
 import crypto from "crypto";
 import EmailVerificationToken from "../models/EmailVerificationToken.js";
@@ -25,30 +26,22 @@ export const register = async (req, res) => {
     }
 
     const safeRole = role === "writer" ? "writer" : "user";
-    const user = await User.create({
+    const otp = createOtp();
+
+    await PendingUser.deleteMany({ email: email.toLowerCase().trim() });
+    const pendingUser = await PendingUser.create({
       name: name.trim(),
       email: email.toLowerCase().trim(),
       password,
       role: safeRole,
-      isEmailVerified: false,
-    });
-
-    const token = crypto.randomBytes(24).toString("hex");
-    const otp = createOtp();
-    await EmailVerificationToken.deleteMany({ user: user._id, used: false });
-    await EmailVerificationToken.create({
-      user: user._id,
-      token,
       otp,
-      purpose: "signup",
-      expiresAt: new Date(Date.now() + 1000 * 60 * 10),
     });
 
     let emailSent = false;
     if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
       try {
         await sendEmail(
-          user.email,
+          pendingUser.email,
           "BookVerse OTP Verification",
           otpTemplate(otp)
         );
@@ -62,7 +55,7 @@ export const register = async (req, res) => {
       message: emailSent
         ? "OTP sent to your email. Verify to complete registration."
         : "Email service not configured, use dev OTP to continue verification.",
-      email: user.email,
+      email: pendingUser.email,
       ...(!emailSent ? { devOtp: otp } : {}),
     });
   } catch (error) {
@@ -73,26 +66,27 @@ export const register = async (req, res) => {
 export const resendOtp = async (req, res) => {
   try {
     const { email } = req.body;
+    
     const user = await User.findOne({ email: email?.toLowerCase().trim() });
-    if (!user) return res.status(404).json({ message: "User not found" });
-    if (user.isEmailVerified) return res.status(400).json({ message: "Email already verified" });
+    if (user) {
+       return res.status(400).json({ message: "Email already verified and account exists" });
+    }
 
-    const token = crypto.randomBytes(24).toString("hex");
+    const pendingUser = await PendingUser.findOne({ email: email?.toLowerCase().trim() });
+    if (!pendingUser) {
+       return res.status(404).json({ message: "Pending registration not found. Please sign up again." });
+    }
+
     const otp = createOtp();
-    await EmailVerificationToken.deleteMany({ user: user._id, used: false, purpose: "signup" });
-    await EmailVerificationToken.create({
-      user: user._id,
-      token,
-      otp,
-      purpose: "signup",
-      expiresAt: new Date(Date.now() + 1000 * 60 * 10),
-    });
+    pendingUser.otp = otp;
+    pendingUser.createdAt = new Date();
+    await pendingUser.save();
 
     let emailSent = false;
     if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
       try {
         await sendEmail(
-          user.email,
+          pendingUser.email,
           "BookVerse OTP Verification",
           otpTemplate(otp)
         );
@@ -117,9 +111,6 @@ export const login = async (req, res) => {
     const user = await User.findOne({ email: email?.toLowerCase().trim() });
 
     if (user && await user.matchPassword(password)) {
-      // if (!user.isEmailVerified) {
-      //   return res.status(403).json({ message: "Please verify OTP sent to your email first." });
-      // }
       return res.json({
         _id: user._id,
         name: user.name,
@@ -146,25 +137,24 @@ export const verifyOtp = async (req, res) => {
       return res.status(400).json({ message: "Email and OTP are required" });
     }
 
-    const user = await User.findOne({ email: email.toLowerCase().trim() });
-    if (!user) return res.status(404).json({ message: "User not found" });
-
-    const otpDoc = await EmailVerificationToken.findOne({
-      user: user._id,
-      otp: String(otp),
-      used: false,
-      purpose: "signup",
-      expiresAt: { $gt: new Date() },
+    const pendingUser = await PendingUser.findOne({ 
+      email: email.toLowerCase().trim(),
+      otp: String(otp)
     });
 
-    if (!otpDoc) {
+    if (!pendingUser) {
       return res.status(400).json({ message: "Invalid or expired OTP" });
     }
 
-    user.isEmailVerified = true;
-    await user.save();
-    otpDoc.used = true;
-    await otpDoc.save();
+    const user = await User.create({
+      name: pendingUser.name,
+      email: pendingUser.email,
+      password: pendingUser.password,
+      role: pendingUser.role,
+      isEmailVerified: true
+    });
+
+    await PendingUser.deleteOne({ _id: pendingUser._id });
 
     if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
       try {
