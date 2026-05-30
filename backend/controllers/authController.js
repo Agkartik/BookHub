@@ -37,26 +37,17 @@ export const register = async (req, res) => {
       otp,
     });
 
-    let emailSent = false;
     if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
-      try {
-        await sendEmail(
-          pendingUser.email,
-          "BookVerse OTP Verification",
-          otpTemplate(otp)
-        );
-        emailSent = true;
-      } catch (e) {
-        emailSent = false;
-      }
+      sendEmail(
+        pendingUser.email,
+        "BookVerse OTP Verification",
+        otpTemplate(otp)
+      ).catch(console.error);
     }
 
     res.status(201).json({
-      message: emailSent
-        ? "OTP sent to your email. Verify to complete registration."
-        : "Email service not configured, use dev OTP to continue verification.",
-      email: pendingUser.email,
-      ...(!emailSent ? { devOtp: otp } : {}),
+      message: "OTP sent to your email. Verify to complete registration.",
+      email: pendingUser.email
     });
   } catch (error) {
     res.status(500).json({ message: "Registration failed" });
@@ -82,23 +73,16 @@ export const resendOtp = async (req, res) => {
     pendingUser.createdAt = new Date();
     await pendingUser.save();
 
-    let emailSent = false;
     if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
-      try {
-        await sendEmail(
-          pendingUser.email,
-          "BookVerse OTP Verification",
-          otpTemplate(otp)
-        );
-        emailSent = true;
-      } catch {
-        emailSent = false;
-      }
+      sendEmail(
+        pendingUser.email,
+        "BookVerse OTP Verification",
+        otpTemplate(otp)
+      ).catch(console.error);
     }
 
     res.json({
-      message: emailSent ? "New OTP sent to your email." : "Email service not configured, use dev OTP.",
-      ...(!emailSent ? { devOtp: otp } : {}),
+      message: "New OTP sent to your email."
     });
   } catch (error) {
     res.status(500).json({ message: "Failed to resend OTP" });
@@ -157,11 +141,7 @@ export const verifyOtp = async (req, res) => {
     await PendingUser.deleteOne({ _id: pendingUser._id });
 
     if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
-      try {
-        await sendEmail(user.email, "Welcome to BookVerse", welcomeTemplate(user.name));
-      } catch {
-        // non-blocking
-      }
+      sendEmail(user.email, "Welcome to BookVerse", welcomeTemplate(user.name)).catch(console.error);
     }
 
     res.json({

@@ -19,7 +19,6 @@ export default function Register() {
   const [loading, setLoading] = useState(false)
   const [otpStage, setOtpStage] = useState(false)
   const [otp, setOtp] = useState("")
-  const [devOtp, setDevOtp] = useState("")
   
   const { registerUser, verifyOtpAndLogin, resendSignupOtp } = useAuth()
   const navigate = useNavigate()
@@ -43,8 +42,7 @@ export default function Register() {
       setLoading(true)
       const response = await registerUser(formData.name, formData.email, formData.password, formData.role)
       setOtpStage(true)
-      setDevOtp(response?.devOtp || "")
-      toast.success(response?.devOtp ? `OTP generated (dev bypass): ${response.devOtp}` : "OTP sent to your email")
+      toast.success("OTP sent to your email")
     } catch (error) {
       toast.error(error?.response?.data?.message || "Registration failed")
     } finally {
@@ -70,8 +68,7 @@ export default function Register() {
     try {
       setLoading(true)
       const response = await resendSignupOtp(formData.email)
-      setDevOtp(response?.devOtp || "")
-      toast.success(response?.devOtp ? `New OTP (dev bypass): ${response.devOtp}` : "New OTP sent")
+      toast.success("New OTP sent")
     } catch (error) {
       toast.error(error?.response?.data?.message || "Failed to resend OTP")
     } finally {
@@ -215,12 +212,6 @@ export default function Register() {
               <p className="text-xs text-slate-300 text-center leading-relaxed">
                 A verification passcode has been sent. Check your inbox at <span className="font-semibold text-white">{formData.email}</span>.
               </p>
-
-              {!!devOtp && (
-                <div className="rounded-xl bg-emerald-500/10 border border-emerald-500/20 p-3.5 text-center text-sm text-emerald-300">
-                  Dev OTP Bypass: <b className="tracking-widest font-mono text-base ml-1">{devOtp}</b>
-                </div>
-              )}
 
               <input
                 type="text"
