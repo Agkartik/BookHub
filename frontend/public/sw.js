@@ -49,6 +49,10 @@ self.addEventListener("fetch", (event) => {
         return response;
       }).catch(() => {
         // Fallback for offline mode when request fails
+        return new Response(JSON.stringify({ message: "Network error or offline" }), {
+          status: 503,
+          headers: { "Content-Type": "application/json" }
+        });
       });
     })
   );

@@ -117,9 +117,9 @@ export const login = async (req, res) => {
     const user = await User.findOne({ email: email?.toLowerCase().trim() });
 
     if (user && await user.matchPassword(password)) {
-      if (!user.isEmailVerified) {
-        return res.status(403).json({ message: "Please verify OTP sent to your email first." });
-      }
+      // if (!user.isEmailVerified) {
+      //   return res.status(403).json({ message: "Please verify OTP sent to your email first." });
+      // }
       return res.json({
         _id: user._id,
         name: user.name,

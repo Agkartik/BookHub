@@ -12,6 +12,7 @@ export default function Library() {
   const [minRating, setMinRating] = useState("");
   const [sort, setSort] = useState("latest");
   const [mood, setMood] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
 
   const [allCategories, setAllCategories] = useState([]);
   const [allMoods, setAllMoods] = useState([]);
@@ -26,8 +27,15 @@ export default function Library() {
   }, []);
 
   useEffect(() => {
-    getBooks({ search, category, language, minRating, sort, mood }).then(setBooks).catch(() => setBooks([]));
-  }, [search, category, language, minRating, sort, mood]);
+    const handler = setTimeout(() => {
+      setDebouncedSearch(search);
+    }, 500);
+    return () => clearTimeout(handler);
+  }, [search]);
+
+  useEffect(() => {
+    getBooks({ search: debouncedSearch, category, language, minRating, sort, mood }).then(setBooks).catch(() => setBooks([]));
+  }, [debouncedSearch, category, language, minRating, sort, mood]);
 
   const categories = allCategories;
   const moods = allMoods;
