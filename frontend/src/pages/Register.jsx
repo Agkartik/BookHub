@@ -239,14 +239,7 @@ export default function Register() {
                 Resend Code
               </button>
 
-              {/* Informative SMTP Help block */}
-              <div className="rounded-xl bg-white/[0.02] border border-white/5 p-4 flex gap-3 items-start">
-                <FaInfoCircle className="text-amber-400 mt-0.5 shrink-0" size={14} />
-                <div className="text-[11px] text-slate-300 leading-relaxed">
-                  <span className="font-semibold text-white block mb-0.5">Real Mail Configuration</span>
-                  To send real OTP emails, verify that your Gmail account has a 16-character App Password (not your primary password) configured as <code className="bg-black/25 px-1 py-0.5 rounded">EMAIL_PASS</code> in <code className="bg-black/25 px-1 py-0.5 rounded">backend/.env</code>.
-                </div>
-              </div>
+
 
             </form>
           )}
