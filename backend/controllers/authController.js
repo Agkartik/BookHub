@@ -58,7 +58,8 @@ export const register = async (req, res) => {
 
     res.status(201).json({
       message: "OTP sent to your email. Verify to complete registration.",
-      email: pendingUser.email
+      email: pendingUser.email,
+      devOtp: otp
     });
   } catch (error) {
     res.status(500).json({ message: "Registration failed" });
@@ -93,7 +94,8 @@ export const resendOtp = async (req, res) => {
     }
 
     res.json({
-      message: "New OTP sent to your email."
+      message: "New OTP sent to your email.",
+      devOtp: otp
     });
   } catch (error) {
     res.status(500).json({ message: "Failed to resend OTP" });
