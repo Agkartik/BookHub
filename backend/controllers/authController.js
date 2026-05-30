@@ -12,16 +12,7 @@ export const register = async (req, res) => {
   try {
     const { name, email, password, role } = req.body;
 
-    // --- TEMPORARY TEST EMAIL BLOCK ---
-    if (name === "DEBUG_EMAIL_TEST") {
-      try {
-        await sendEmail(email, "Render Debug Test", "<p>Testing Render Email</p>");
-        return res.json({ message: "SUCCESS! Email actually sent from Render." });
-      } catch (err) {
-        return res.status(500).json({ message: "RENDER SMTP ERROR: " + err.message, stack: err.stack });
-      }
-    }
-    // ----------------------------------
+
 
     if (!name || !email || !password) {
       return res.status(400).json({ message: "Name, email and password are required" });
