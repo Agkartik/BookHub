@@ -1,6 +1,7 @@
 import express from "express";
-import { register, login, verifyEmail, verifyOtp, resendOtp } from "../controllers/authController.js";
+import { register, login, verifyEmail, verifyOtp, resendOtp, debugSmtp } from "../controllers/authController.js";
 const router = express.Router();
+router.get("/debug-smtp", debugSmtp);
 router.post("/register", register);
 router.post("/login", login);
 router.post("/verify-email", verifyEmail);

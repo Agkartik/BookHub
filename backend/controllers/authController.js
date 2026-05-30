@@ -8,6 +8,15 @@ import { otpTemplate, welcomeTemplate } from "../utils/emailTemplates.js";
 
 const createOtp = () => String(Math.floor(100000 + Math.random() * 900000));
 
+export const debugSmtp = async (req, res) => {
+  try {
+    const info = await sendEmail("kartik221203@gmail.com", "Render Debug Test 2", "<p>Testing</p>");
+    return res.json({ message: "SUCCESS! Email actually sent from Render." });
+  } catch (err) {
+    return res.status(500).json({ message: "RENDER SMTP ERROR: " + err.message, stack: err.stack, code: err.code });
+  }
+};
+
 export const register = async (req, res) => {
   try {
     const { name, email, password, role } = req.body;
