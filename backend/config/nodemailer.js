@@ -1,25 +1,26 @@
-import nodemailer from "nodemailer";
-
-const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 587,
-  secure: false, // use STARTTLS
-  requireTLS: true,
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS ? process.env.EMAIL_PASS.replace(/\s+/g, '') : undefined
-  },
-  family: 4, // Force IPv4 to prevent IPv6 timeouts on Render
-  connectionTimeout: 10000,
-  greetingTimeout: 10000,
-  socketTimeout: 10000
-});
+// Uses Brevo (sendinblue) HTTP API on port 443 — works on Render Free Tier
 
 export const sendEmail = async (to, subject, html) => {
-  await transporter.sendMail({
-    from: `"BookHub" <${process.env.EMAIL_USER}>`,
-    to,
-    subject,
-    html
+  const response = await fetch("https://api.brevo.com/v3/smtp/email", {
+    method: "POST",
+    headers: {
+      "accept": "application/json",
+      "api-key": process.env.BREVO_API_KEY,
+      "content-type": "application/json",
+    },
+    body: JSON.stringify({
+      sender: { name: "BookHub", email: "ai.verse.studio00@gmail.com" },
+      to: [{ email: to }],
+      subject,
+      htmlContent: html,
+    }),
   });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.message || "Failed to send email via Brevo");
+  }
+
+  return data;
 };

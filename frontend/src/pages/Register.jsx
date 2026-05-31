@@ -19,7 +19,6 @@ export default function Register() {
   const [loading, setLoading] = useState(false)
   const [otpStage, setOtpStage] = useState(false)
   const [otp, setOtp] = useState("")
-  const [devOtp, setDevOtp] = useState("")
   
   const { registerUser, verifyOtpAndLogin, resendSignupOtp } = useAuth()
   const navigate = useNavigate()
@@ -41,9 +40,8 @@ export default function Register() {
     
     try {
       setLoading(true)
-      const response = await registerUser(formData.name, formData.email, formData.password, formData.role)
+      await registerUser(formData.name, formData.email, formData.password, formData.role)
       setOtpStage(true)
-      if (response.devOtp) setDevOtp(response.devOtp)
       toast.success("OTP sent to your email")
     } catch (error) {
       toast.error(error?.response?.data?.message || "Registration failed")
@@ -69,8 +67,7 @@ export default function Register() {
   const handleResendOtp = async () => {
     try {
       setLoading(true)
-      const response = await resendSignupOtp(formData.email)
-      if (response.devOtp) setDevOtp(response.devOtp)
+      await resendSignupOtp(formData.email)
       toast.success("New OTP sent")
     } catch (error) {
       toast.error(error?.response?.data?.message || "Failed to resend OTP")
@@ -215,14 +212,6 @@ export default function Register() {
               <p className="text-xs text-slate-300 text-center leading-relaxed">
                 A verification passcode has been sent. Check your inbox at <span className="font-semibold text-white">{formData.email}</span>.
               </p>
-
-              {devOtp && (
-                <div className="rounded-xl bg-emerald-500/10 border border-emerald-500/20 p-4 text-center">
-                  <span className="text-xs font-semibold text-emerald-400 block mb-1 uppercase tracking-wider">Demo OTP Bypass</span>
-                  <span className="text-xl font-mono font-bold text-emerald-300 tracking-widest">{devOtp}</span>
-                  <p className="text-[10px] text-emerald-400/70 mt-2 leading-tight">Since Render Free Tier blocks emails, use this code to sign up instantly.</p>
-                </div>
-              )}
 
               <input
                 type="text"
